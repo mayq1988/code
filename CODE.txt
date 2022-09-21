@@ -1,0 +1,45 @@
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import GradientBoostingClassifier
+class Settings(object):
+    def __init__(self):
+        self.files = ['sumradio.csv']
+        
+        self.fix_training = False
+        self.seed = 123
+        
+        # preprocessing
+        self.outlier = {'switch': True, 'range': [0.01,0.99]}
+        
+        self.std = 'standard' # option: min_max, standard, no
+        
+        # feature selection
+        self.config_variance = {'switch': True, 'prob': 1}
+        
+        self.config_univariate = {'switch': True,
+                                  'xx_correlation':True,
+                                  'xx_correlation_coef':0.8,
+                             'kbest_switch': False,
+                             'kbest_k': 35,
+                             'test_anova_wilcox_switch': False,
+                             'test_anova_p': 0.05,
+                             'test_wilcox_p': 0.05,
+                             'test_glm_switch': True,
+                             'test_glm_p': 0.05,
+                             'MRMR':False,
+                             'MRMR_k':30}
+        
+        self.config_model_ = {'switch':True,
+                              'methods':[{'name':'lasso','switch':True},
+                              {'name':'GBDT','switch': False,'par':dict(n_estimators=100, learning_rate=1.0,max_depth=1)},
+                              {'name':'REF','switch':False,
+                              'REF_estimator':GradientBoostingClassifier(),'REF_n_features_to_select':2}]}
+
+        self.config = {'variance': self.config_variance,
+                  'univariate': self.config_univariate,
+                  'model': self.config_model_}
+        
+        # machine learning method (recommend setting single True each time)
+        self.config_modelling = {'LRCV': False,  # logistic regression + cross-validation
+              'LR':False, # logistic regression
+              'SVM': False,
+              'RF': True, # 
